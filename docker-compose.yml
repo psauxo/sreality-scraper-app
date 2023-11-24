@@ -1,0 +1,63 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    restart: on-failure
+    environment:
+      # Note: HOST is set to 0.0.0.0 to allow access from outside of the container
+      HOST: 0.0.0.0
+    container_name: sreality_scraper_app
+    command: python http_server/main.py
+    volumes:
+      - ./:/code
+    ports:
+      - '${PORT:-8080}:8080'
+    depends_on:
+      - postgres
+    networks:
+      - sreality_scraper_network
+
+  scraper:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    environment:
+      HOST: 0.0.0.0
+    container_name: sreality_scraper_async
+    command: scrapy runspider scraper/spiders/sreality_spider.py
+    volumes:
+      - ./:/code
+    depends_on:
+      - postgres
+      - app
+    networks:
+      - sreality_scraper_network
+
+  postgres:
+    image: postgres:14.0
+    container_name: sreality_scraper_postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init_db.sh:/docker-entrypoint-initdb.d/init_db.sh
+    environment:
+      # Note: we set explicit values for variables for init_db.sh
+      POSTGRES_HOST: ${POSTGRES_HOST:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - '${POSTGRES_PORT:-5432}:5432'
+    networks:
+      - sreality_scraper_network
+
+volumes:
+  postgres_data:
+
+networks:
+  sreality_scraper_network:
+    name: sreality_scraper_network
+    driver: bridge

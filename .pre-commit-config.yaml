@@ -1,0 +1,45 @@
+repos:
+  - repo: https://github.com/psf/black
+    rev: 23.3.0
+    hooks:
+      - id: black
+        args: ['-l 119']
+  - repo: https://github.com/asottile/blacken-docs
+    rev: 1.16.0
+    hooks:
+      - id: blacken-docs
+        additional_dependencies: [black==22.12.0]
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.15.0
+    hooks:
+      - id: pyupgrade
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-ast # Is it valid Python?
+      # Check for debugger imports and py37+ breakpoint() calls
+      # in python source.
+      - id: debug-statements
+  - repo: https://github.com/prettier/pre-commit
+    rev: 57f39166b5a5a504d6808b87ab98d41ebf095b46
+    hooks:
+      - id: prettier
+        entry: prettier --write --single-quote --trailing-comma=all
+        files: "\\.(\
+          css|less|scss\
+          |graphql|gql\
+          |js|jsx\
+          |json\
+          |md|markdown|mdown|mkdn\
+          |mdx\
+          |ts|tsx\
+          |yaml|yml\
+          )$"
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: check-case-conflict
+      - id: check-json
+      - id: end-of-file-fixer
+      - id: mixed-line-ending

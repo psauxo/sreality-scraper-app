@@ -1,0 +1,7 @@
+.dockerignore
+.git
+.gitignore
+.github
+venv
+.flake8
+.pre-commit-config.yaml
