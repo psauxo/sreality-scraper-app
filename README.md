@@ -1,8 +1,42 @@
-# Simple HTTP server with Scrapy
+# Project Brief
 
-This is a simple HTTP server that uses Scrapy to crawl a website (sreality.cz) via sreality_spider.py and save results in db.
+## Objective
 
-# Common requirements:
+The primary objective of this project is to develop a system that utilizes the Scrapy framework to scrape the first 500 items (including their titles and image URLs) from the real estate website sreality.cz, specifically focusing on flats for sale. These items should be saved in a PostgreSQL database. Additionally, the project involves implementing a simple HTTP server in Python, which will display these 500 items on a basic web page, showing each item's title and image.
+
+---
+
+### Key Requirements
+
+- **Scraping**: Use Scrapy to scrape the first 500 items (titles and image URLs) from the 'flats for sale' section on sreality.cz.
+- **Database**: Save the scraped data in a PostgreSQL database.
+- **HTTP Server**: Create a simple Python-based HTTP server to display the scraped items on a web page.
+- **Docker Integration**: Package the entire system using Docker, enabling it to be run with a single docker-compose up command.
+
+### Execution
+
+The system should be set up in such a way that executing `docker-compose up` will launch the entire application. Once running, the user can view the scraped advertisements by navigating to http://127.0.0.1:8080.
+
+---
+
+## HTTP Server
+
+- Description: A minimalistic HTTP server, deliberately built without frameworks like Flask.
+- Functionality: Displays 500 apartments for sale from sreality.cz at the route '/'.
+
+## Scraper Service
+
+- Description: A Scrapy-based scraper service.
+- Functionality: Executes through sreality_spider.py, autonomously scraping 500 search results in the background and persisting them to the database.
+
+## Database Service
+
+- Description: A dedicated database service.
+- Functionality: Stores data retrieved by the scraper service.
+
+---
+
+## Project Setup
 
 ## Setup environment variables
 
@@ -10,6 +44,11 @@ This is a simple HTTP server that uses Scrapy to crawl a website (sreality.cz) v
 $ cp .env.example .env
 $ vi .env
 ```
+
+## Setup options
+
+- run locally
+- run with docker-compose
 
 # To run locally:
 
